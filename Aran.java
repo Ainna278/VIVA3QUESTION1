@@ -1,19 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package viva3;
-
-
-/**
- *
- * @author Jawwad Ibne Kabir & Zannat Ul Ferdous
- */
-
-
-
-
 public class Aran {
+    
     private int level;
     private int jobAdvancement;
     private static int[] jobAdvMap = {10, 30, 60, 100, 160, 260};
@@ -80,25 +66,37 @@ public class Aran {
     }
 
     // Static method to check if input is valid
- public static boolean isValid(String input) {
-    // Input is a string only consisting of characters 'B', 'P', 'T', and 'M'
-    if (!input.matches("[BPTM]+")) {
+   // Static method to check if input is valid
+public static boolean isValid(String input) {
+    // Input should contain at least one main character (PTMQ)
+    if (!input.matches(".[PTMQ].")) {
         return false;
     }
 
-    // 'P' can only be followed by 'T' and 'T' can only be followed by 'M'
-    for (int i = 0; i < input.length() - 1; i++) {
-        char currentChar = input.charAt(i);
-        char nextChar = input.charAt(i + 1);
+    // Input is a string consisting of alphabets and digits
+    if (!input.matches("[A-Za-z0-9]+")) {
+        return false;
+    }
 
-        if ((currentChar == 'P' && nextChar != 'T') || (currentChar == 'T' && nextChar != 'M')) {
-            return false;
-        }
+    // 'P' can only be followed by 'T'
+    // 'M' can only be followed by 'M'
+    // 'Q' can only be followed by none
+    // Rules on Main Characters can be broken due to the presence of Special Characters
+    if (!input.matches("(PT|MM|Q|.[BDGH].)*")) {
+        return false;
     }
 
     // 'B' may or may not exist only before 'P'
-    return !input.contains("BB") && !input.contains("B[^P]");
+    // 'D' may or may not exist only before 'T'
+    // 'G' may or may not exist after 'M'
+    // 'H' may or may not exist after 'Q'
+    if (!input.matches("(.B?P.)|(.D?T.)|(.G?M.)|(.H?Q.)")) {
+        return false;
+    }
+
+    return true;
 }
+
     // toString method
     @Override
     public String toString() {
@@ -108,17 +106,18 @@ public class Aran {
     }
     
     public static void main(String[] args) {
-        // Test the Aran class
-        System.out.println("PTM              :     " + Aran.isValid("PTM"));
-        System.out.println("PTMMTP           :     " + Aran.isValid("PTMMTP"));
-        System.out.println("BPTMBPTM         :     " + Aran.isValid("BPTMBPTM"));
-        System.out.println("PT               :     " + Aran.isValid("PT"));
-
-        Aran aran1 = new Aran();
-        System.out.println("\nAran Info \n" + aran1);
-
-        Aran aran2 = new Aran(5);
-        System.out.println("\nAran Info\n" + aran2);
+ String[] testCases = new String[] {
+ "PTM", "PTMMTP", "BPTMBPTM", "PT", "PTMQ", "PTMQH", "BPTMQH", "PTMQH",
+"BPDTMGQH", 
+ "PTMQH", "PTMQH", "12PTHQGM", "12PTQHMG", "12PTMGQH",
+"PTMQBPTMQBPTMQ", "DTBP123QHMG", 
+ "BTDP", "TP", "TBP", "BDT", "DTP", "ABCD", "D"
+ };
+ 
+ for(String input: testCases){
+     System.out.printf("%-20s : %s\n", input, Aran.isValid(input));
+ }
+ 
     }
     
 }
